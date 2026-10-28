@@ -7,7 +7,11 @@ function App() {
   const { products, loading, error } = useProducts();
   const [cart, setCart] = useState([]);
 
-  console.log("Carrito:", cart);
+  const [search, setSearch] = useState("");
+
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(search.toLowerCase()),
+  );
 
   const addToCart = (product) => {
     //Busca si el producto ya existe en el carrito. Si no lo encuentra, devuelve undefined.
@@ -39,10 +43,20 @@ function App() {
     <main className="min-h-screen bg-slate-100 p-8">
       <h1 className="text-3xl font-bold mb-6">MiniShop 🛒</h1>
 
+      <div className="mb-8">
+        <input
+          type="text"
+          placeholder="Buscar productos..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="w-full max-w-md p-3 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
